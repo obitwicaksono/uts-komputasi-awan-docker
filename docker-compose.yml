@@ -10,6 +10,12 @@ services:
       - db-data:/var/lib/postgresql/data
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
     build: ./api
     environment:
@@ -18,7 +24,8 @@ services:
       DB_USER: postgres
       DB_PASSWORD: pass123
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - frontend
       - backend
