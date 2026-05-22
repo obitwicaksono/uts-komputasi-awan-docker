@@ -1,4 +1,4 @@
-# Aplikasi Manajemen Barang - Cloud Computing Docker Assignment
+# Tugas Praktikum Docker Volume, Network, dan Docker Compose
 
 [![Docker](https://img.shields.io/badge/Docker-Containerization-blue)](https://www.docker.com/)
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Orchestration-blue)](https://docs.docker.com/compose/)
@@ -35,7 +35,6 @@ Aplikasi Manajemen Barang adalah project UTS (Ujian Tengah Semester) untuk mata 
 
 ### Fitur Utama
 
-- 📦 **CRUD Operations**: Create, Read, Update, Delete barang
 - 🔄 **REST API**: Backend API untuk mengelola data
 - 🎨 **Web Interface**: Frontend untuk interaksi pengguna
 - 💾 **Persistent Database**: PostgreSQL untuk data storage
