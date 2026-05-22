@@ -1,322 +1,675 @@
-# 📚 Documentation Files Overview
+# Aplikasi Manajemen Barang - Cloud Computing Docker Assignment
 
-## Files Created in This Session
+[![Docker](https://img.shields.io/badge/Docker-Containerization-blue)](https://www.docker.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Orchestration-blue)](https://docs.docker.com/compose/)
+[![Python](https://img.shields.io/badge/Python-3.9+-green)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web%20Framework-red)](https://flask.palletsprojects.com/)
 
-### 1. **JAWABAN_UTS_LENGKAP.md** (Main Answer)
-**Location:** `~/.copilot/session-state/.../JAWABAN_UTS_LENGKAP.md`
+## 📋 Daftar Isi
 
-**Content:**
-- Complete answer to all UTS questions
-- Real test results with actual logs
-- Detailed analysis of problems
-- Architecture diagrams
-- Session state management strategies
-- Implementation recommendations
-
-**Use when:** Need comprehensive, detailed answer
-
----
-
-### 2. **QUICK_SUMMARY.txt** (Quick Reference)
-**Location:** `~/.copilot/session-state/.../QUICK_SUMMARY.txt`
-
-**Content:**
-- Quick bullet-point answers
-- Test results summary
-- Problem highlights
-- Key learning points
-
-**Use when:** Need fast reference or to show overview
+- [Tentang Project](#tentang-project)
+- [Arsitektur](#arsitektur)
+- [Persyaratan](#persyaratan)
+- [Setup & Installation](#setup--installation)
+- [Menjalankan Aplikasi](#menjalankan-aplikasi)
+- [Testing & Monitoring](#testing--monitoring)
+- [Struktur Project](#struktur-project)
+- [Load Balancer](#load-balancer)
+- [Scaling](#scaling)
+- [Troubleshooting](#troubleshooting)
+- [Dokumentasi Lengkap](#dokumentasi-lengkap)
 
 ---
 
-### 3. **LOAD_BALANCER_IMPLEMENTATION.md** (Implementation Guide)
-**Location:** `./LOAD_BALANCER_IMPLEMENTATION.md` (in project directory)
+## Tentang Project
 
-**Content:**
-- Architecture diagrams (current vs improved)
-- Step-by-step implementation guide
-- nginx.conf template
-- docker-compose.yml update
-- Testing scenarios
-- Troubleshooting guide
-- Performance comparison
+Aplikasi Manajemen Barang adalah project UTS (Ujian Tengah Semester) untuk mata kuliah **Komputasi Awan (Cloud Computing)** yang mendemonstrasikan:
 
-**Use when:** Actually implementing the solution
+✅ **Containerization** dengan Docker  
+✅ **Microservices Architecture** (Web + API separation)  
+✅ **Database Persistence** dengan PostgreSQL  
+✅ **Orchestration** menggunakan Docker Compose  
+✅ **Scaling** dengan multiple container instances  
+✅ **Load Balancing** dengan Nginx  
+✅ **Networking** antar container  
 
----
+### Fitur Utama
 
-### 4. **nginx.conf** (Configuration File)
-**Location:** `./nginx.conf` (in project directory)
-
-**Content:**
-- Production-ready Nginx configuration
-- Upstream server definition
-- Proxy settings
-- Health check endpoint
-- Keepalive configuration
-
-**Use when:** Deploying with load balancer
+- 📦 **CRUD Operations**: Create, Read, Update, Delete barang
+- 🔄 **REST API**: Backend API untuk mengelola data
+- 🎨 **Web Interface**: Frontend untuk interaksi pengguna
+- 💾 **Persistent Database**: PostgreSQL untuk data storage
+- ⚖️ **Load Balancing**: Nginx untuk distribusi traffic
+- 📊 **Scaling**: Kemampuan scale API instances secara horizontal
 
 ---
 
-### 5. **docker-compose-with-nginx.yml** (Complete Stack)
-**Location:** `./docker-compose-with-nginx.yml` (in project directory)
+## Arsitektur
 
-**Content:**
-- Complete docker-compose setup with Nginx
-- All services (db, api, nginx, web)
-- Network configuration
-- Environment variables
-- Health checks
-- Volume definitions
+### Arsitektur Keseluruhan
 
-**Use when:** Ready to deploy with load balancer
-
----
-
-### 6. **TESTING_RESULTS.md** (Test Analysis)
-**Location:** `~/.copilot/session-state/.../TESTING_RESULTS.md`
-
-**Content:**
-- Detailed test execution results
-- Container status
-- Network analysis
-- DNS resolution test
-- Request distribution analysis
-- Problems identified
-- Test methodology
-
-**Use when:** Understanding test methodology
-
----
-
-### 7. **COMPLETE_ANALYSIS.md** (Alternative Analysis)
-**Location:** `~/.copilot/session-state/.../COMPLETE_ANALYSIS.md`
-
-**Content:**
-- Ringkasan eksekusi
-- Hasil testing
-- Analisis problems
-- Solusi load balancer
-- Session state management
-- Learning outcomes
-
-**Use when:** Need educational perspective
-
----
-
-## 📋 Document Mapping to Questions
-
-### Question 1: "Apa yang terjadi?"
-**Answer in:** 
-- JAWABAN_UTS_LENGKAP.md → "Hasil Eksperimen"
-- QUICK_SUMMARY.txt → "HASIL TEST"
-
-### Question 2: "Apakah web bisa memilih salah satu instance API?"
-**Answer in:**
-- JAWABAN_UTS_LENGKAP.md → "Jawaban Utama - Pertanyaan 2"
-- QUICK_SUMMARY.txt → "BISA MEMILIH API"
-
-### Question 3: "Load Balancer Kebutuhan?"
-**Answer in:**
-- JAWABAN_UTS_LENGKAP.md → "Kebutuhan Load Balancer"
-- LOAD_BALANCER_IMPLEMENTATION.md → "Complete Implementation"
-
-### Question 4: "Session State Management?"
-**Answer in:**
-- JAWABAN_UTS_LENGKAP.md → "Session State Management"
-- LOAD_BALANCER_IMPLEMENTATION.md → "Session State Handling"
-
----
-
-## 🔄 How to Use These Files
-
-### For Study/Understanding
 ```
-1. Start with: QUICK_SUMMARY.txt
-   └─ Gets overview in 2 minutes
-   
-2. Then read: JAWABAN_UTS_LENGKAP.md
-   └─ Detailed explanation (10 minutes)
-   
-3. Reference: TESTING_RESULTS.md
-   └─ See actual test data
+┌─────────────────────────────────────────────────────────┐
+│                   DOCKER COMPOSE NETWORK               │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │           FRONTEND LAYER (8000/5000)              │  │
+│  │  ┌─────────────────────────────────────────────┐ │  │
+│  │  │  Web App (Flask)                           │ │  │
+│  │  │  - Routes: GET /, POST /                    │ │  │
+│  │  │  - Template rendering                      │ │  │
+│  │  │  - HTTP client untuk API calls              │ │  │
+│  │  └─────────────────────────────────────────────┘ │  │
+│  └──────────────┬───────────────────────────────────┘  │
+│                 │                                       │
+│                 ▼ (requests.get/post)                   │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │         API LAYER (8080)                         │  │
+│  │  ┌──────────────┐      ┌──────────────┐         │  │
+│  │  │  API-1       │      │  API-2       │  ...    │  │
+│  │  │  (scaled)    │      │  (scaled)    │         │  │
+│  │  │              │      │              │         │  │
+│  │  │ Routes:      │      │ Routes:      │         │  │
+│  │  │ GET /barang  │      │ GET /barang  │         │  │
+│  │  │ POST /barang │      │ POST /barang │         │  │
+│  │  │ PUT /barang  │      │ PUT /barang  │         │  │
+│  │  │ DELETE /...  │      │ DELETE /...  │         │  │
+│  │  └──────────────┘      └──────────────┘         │  │
+│  └──────────────┬───────────────────────────────────┘  │
+│                 │                                       │
+│                 ▼ (psycopg2)                            │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │         DATABASE LAYER                          │  │
+│  │  ┌─────────────────────────────────────────────┐ │  │
+│  │  │  PostgreSQL (Port 5432)                     │ │  │
+│  │  │  Database: barangdb                         │ │  │
+│  │  │  User: postgres                             │ │  │
+│  │  │  Schema: barang table                       │ │  │
+│  │  └─────────────────────────────────────────────┘ │  │
+│  └──────────────────────────────────────────────────┘  │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │    OPTIONAL: LOAD BALANCER (NGINX - Port 80)    │  │
+│  │    (untuk intelligent traffic distribution)      │  │
+│  └──────────────────────────────────────────────────┘  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### For Implementation
-```
-1. Start with: LOAD_BALANCER_IMPLEMENTATION.md
-   └─ Architecture & step-by-step
-   
-2. Copy files:
-   ├─ nginx.conf
-   └─ docker-compose-with-nginx.yml
-   
-3. Follow: Step-by-step implementation section
-   
-4. Test: Using provided test scenarios
-```
+### Container Details
 
-### For Presentation
-```
-1. Use: QUICK_SUMMARY.txt
-   └─ Main talking points
-   
-2. Show: Diagrams from LOAD_BALANCER_IMPLEMENTATION.md
-   └─ Visual explanation
-   
-3. Reference: Test results from JAWABAN_UTS_LENGKAP.md
-   └─ Empirical evidence
-```
+| Container | Port | Peran | Framework |
+|-----------|------|-------|-----------|
+| **web** | 8000/5000 | Frontend application | Flask + Python |
+| **api** | 8080 | Backend REST API | Flask + Python |
+| **db** | 5432 | Database | PostgreSQL |
+| **nginx** | 80 | Load Balancer (opsional) | Nginx |
 
 ---
 
-## 🧪 Testing Results Summary
+## Persyaratan
 
-### Test Performed
+### System Requirements
+
+- **Docker**: v20.10+
+- **Docker Compose**: v1.29+
+- **RAM**: Minimal 2GB (untuk multiple instances)
+- **Disk Space**: Minimal 500MB
+- **OS**: Linux, macOS, atau Windows (dengan WSL2)
+
+### Software yang Akan Diinstall Otomatis
+
+- Python 3.9+
+- Flask (Web Framework)
+- psycopg2 (PostgreSQL adapter)
+- requests (HTTP client)
+- PostgreSQL 13
+
+---
+
+## Setup & Installation
+
+### 1. Clone/Download Project
+
 ```bash
-docker compose up -d --scale api=2
-# Made 5 requests via web interface
-# Monitored which API instance handled each
+# Jika menggunakan Git
+git clone <repository-url>
+cd uts-komputasi-awan-docker
+
+# Atau jika sudah punya folder project
+cd /path/to/uts-komputasi-awan-docker
 ```
 
-### Results
-```
-API-1: 1 request (20%)
-API-2: 5 requests (80%)
+### 2. Verifikasi struktur folder
 
-Total: Uneven distribution!
-```
+```bash
+# Pastikan struktur folder seperti ini:
+ls -la
 
-### Key Finding
-**Docker DNS returns both IPs, but HTTP client connections are sticky.**
-- First connection to one IP
-- Connection is cached
-- Subsequent requests reuse same connection
-- Result: NOT evenly distributed
-
----
-
-## 📊 Real Logs from Testing
-
-### API-1 Logs
-```
-172.19.0.4 - - [21/May/2026 21:38:04] "GET /barang HTTP/1.1" 200 -
-[Total: 1 request]
+# Output yang diharapkan:
+# ├── docker-compose.yml
+# ├── docker-compose-with-nginx.yml
+# ├── nginx.conf
+# ├── api/
+# │   ├── app.py
+# │   ├── Dockerfile
+# │   └── requirements.txt
+# ├── web/
+# │   ├── app.py
+# │   ├── Dockerfile
+# │   ├── requirements.txt
+# │   └── templates/
+# │       └── index.html
+# └── README.md
 ```
 
-### API-2 Logs
-```
-172.19.0.4 - - [21/May/2026 21:37:38] "GET /barang HTTP/1.1" 200 -
-172.19.0.4 - - [21/May/2026 21:38:02] "GET /barang HTTP/1.1" 200 -
-172.19.0.4 - - [21/May/2026 21:38:02] "GET /barang HTTP/1.1" 200 -
-172.19.0.4 - - [21/May/2026 21:38:03] "GET /barang HTTP/1.1" 200 -
-172.19.0.4 - - [21/May/2026 21:38:03] "GET /barang HTTP/1.1" 200 -
-[Total: 5 requests]
-```
+### 3. Check Docker Installation
 
-**Proof:** Sticky routing to API-2 in this test case
+```bash
+# Verifikasi Docker
+docker --version
+docker ps
 
----
-
-## 🎯 Key Takeaways
-
-1. **Docker Compose Scaling ≠ Load Balancing**
-   - Creates containers but doesn't distribute traffic
-
-2. **DNS Resolution is Necessary but Not Sufficient**
-   - Returns multiple IPs but client needs intelligence
-
-3. **Connection Pooling Causes Sticky Routing**
-   - HTTP client caches connection
-   - Reused for all requests
-
-4. **Load Balancer is Essential for Production**
-   - Nginx: Simple, lightweight, effective
-   - Traefik: Modern, auto-discovery, HTTPS support
-
-5. **Current API is Scalable**
-   - Already stateless
-   - Database-backed persistence
-   - Just needs load balancer
-
----
-
-## 📞 Questions & Answers Quick Reference
-
-| Q | A | File |
-|---|---|------|
-| Apa yang terjadi? | Docker buat 2 containers, traffic sticky to 1 | JAWABAN_UTS_LENGKAP.md |
-| Bisakah pilih otomatis? | Hanya sebagian - DNS ya, tapi routing sticky | JAWABAN_UTS_LENGKAP.md |
-| Kenapa perlu LB? | Distribusi, failover, optimization | JAWABAN_UTS_LENGKAP.md |
-| Session state? | API sudah stateless, DB shared, optimal | JAWABAN_UTS_LENGKAP.md |
-| Implementasi? | Follow LOAD_BALANCER_IMPLEMENTATION.md | LOAD_BALANCER_IMPLEMENTATION.md |
-
----
-
-## 🚀 Next Steps
-
-### To Learn
-- [ ] Read QUICK_SUMMARY.txt (5 min)
-- [ ] Read JAWABAN_UTS_LENGKAP.md (15 min)
-- [ ] Review diagrams in LOAD_BALANCER_IMPLEMENTATION.md (5 min)
-
-### To Implement
-- [ ] Review current docker-compose.yml
-- [ ] Copy nginx.conf to project
-- [ ] Update docker-compose.yml with nginx service
-- [ ] Change web API_URL to http://nginx:80
-- [ ] Test with `docker compose up -d --scale api=2`
-- [ ] Verify distribution with logs
-
-### To Verify
-- [ ] Monitor api-1 and api-2 logs
-- [ ] Make 10 requests via web interface
-- [ ] Count requests in each log
-- [ ] Verify roughly equal distribution
-- [ ] Test failover (kill one instance)
-
----
-
-## 📁 File Structure
-
-```
-Project Root
-├── docker-compose.yml (original)
-├── docker-compose-with-nginx.yml (new - with LB)
-├── nginx.conf (new - LB config)
-├── api/
-├── web/
-└── LOAD_BALANCER_IMPLEMENTATION.md (new - guide)
-
-Session State (~/.copilot/session-state/.../):
-├── JAWABAN_UTS_LENGKAP.md (main answer)
-├── QUICK_SUMMARY.txt (quick ref)
-├── TESTING_RESULTS.md (test analysis)
-├── COMPLETE_ANALYSIS.md (alternative analysis)
-└── README.md (this file)
+# Verifikasi Docker Compose
+docker compose version
 ```
 
 ---
 
-## ✅ Checklist: UTS Completion
+## Menjalankan Aplikasi
 
-- [x] Command executed: `docker compose up -d --scale api=2`
-- [x] Tested: Request distribution analysis
-- [x] Found: Sticky routing to one instance
-- [x] Analyzed: Why distribution is uneven
-- [x] Proposed: Nginx load balancer solution
-- [x] Documented: Session state management
-- [x] Created: Implementation guide
-- [x] Provided: Real test results
-- [x] Explained: Architecture diagrams
+### Opsi 1: Tanpa Load Balancer (DEFAULT)
 
-**Status: COMPLETE** ✅
+Ini adalah setup yang paling sederhana, cocok untuk development dan testing basic.
+
+```bash
+# 1. Navigate ke project directory
+cd /path/to/uts-komputasi-awan-docker
+
+# 2. Build dan start services
+docker compose up -d
+
+# 3. Check status services
+docker compose ps
+
+# Output yang diharapkan:
+# NAME                COMMAND                 STATE      PORTS
+# uts-komputasi...    "python app.py"         Up         0.0.0.0:8000->8000/tcp
+# uts-komputasi...    "python app.py"         Up         0.0.0.0:8080->8080/tcp
+# uts-komputasi...    "postgres"              Up         5432/tcp
+
+# 4. Akses aplikasi
+# - Web: http://localhost:8000 atau http://localhost:5000
+# - API: http://localhost:8080
+```
+
+### Opsi 2: Dengan Load Balancer (ADVANCED)
+
+Menggunakan Nginx untuk intelligent traffic distribution (round-robin).
+
+```bash
+# 1. Navigate ke project directory
+cd /path/to/uts-komputasi-awan-docker
+
+# 2. Gunakan docker-compose-with-nginx.yml
+docker compose -f docker-compose-with-nginx.yml up -d
+
+# 3. Check status
+docker compose -f docker-compose-with-nginx.yml ps
+
+# 4. Akses aplikasi
+# - Web: http://localhost (port 80)
+# - API via Load Balancer: http://localhost/api/
+# - API direct: http://localhost:8080
+```
+
+### Opsi 3: Scaling dengan Multiple API Instances
+
+```bash
+# Scale API instances menjadi 3
+docker compose up -d --scale api=3
+
+# Atau jika pakai Nginx:
+docker compose -f docker-compose-with-nginx.yml up -d --scale api=3
+
+# Verifikasi
+docker compose ps
+# Akan menampilkan: api-1, api-2, api-3
+
+# Check load distribution
+# Buka http://localhost:8000 dan lihat requests yang masuk
+```
+
+### Stop & Cleanup
+
+```bash
+# Stop services (keep volumes)
+docker compose down
+
+# Stop dan hapus semua data (termasuk database)
+docker compose down -v
+
+# Remove images juga
+docker compose down -v --rmi all
+```
 
 ---
 
-**Created:** 2026-05-22  
-**For:** UTS Komputasi Awan - Docker Compose API Scaling  
-**Files:** 7 total (3 project, 4 session state)
+## Testing & Monitoring
 
+### 1. Health Check Services
+
+```bash
+# Cek semua container berjalan
+docker compose ps
+
+# Lihat logs web
+docker compose logs -f web
+
+# Lihat logs api
+docker compose logs -f api
+
+# Lihat logs database
+docker compose logs -f db
+
+# Kombinasi: tail last 50 lines
+docker compose logs --tail=50
+```
+
+### 2. Test API Endpoints
+
+```bash
+# GET semua barang
+curl http://localhost:8080/barang
+
+# GET barang by ID
+curl http://localhost:8080/barang/1
+
+# POST barang baru
+curl -X POST http://localhost:8080/barang \
+  -H "Content-Type: application/json" \
+  -d '{"nama":"Laptop","harga":5000000}'
+
+# PUT update barang
+curl -X PUT http://localhost:8080/barang/1 \
+  -H "Content-Type: application/json" \
+  -d '{"nama":"Laptop Gaming","harga":6000000}'
+
+# DELETE barang
+curl -X DELETE http://localhost:8080/barang/1
+```
+
+### 3. Test Web Interface
+
+```bash
+# Buka di browser
+http://localhost:8000
+# atau
+http://localhost:5000
+
+# Test CRUD melalui web form
+```
+
+### 4. Test Load Balancing (Jika Scale > 1)
+
+```bash
+# Run dalam loop untuk melihat distribusi traffic
+for i in {1..10}; do
+  curl http://localhost:8080/barang
+  sleep 0.5
+done
+
+# Lihat logs dari tiap API instance
+docker compose logs api-1 | grep "GET /barang"
+docker compose logs api-2 | grep "GET /barang"
+docker compose logs api-3 | grep "GET /barang"
+```
+
+### 5. Monitor Resource Usage
+
+```bash
+# Real-time container statistics
+docker stats
+
+# CPU, Memory, Network, Block I/O per container
+docker stats --no-stream
+```
+
+### 6. Database Inspection
+
+```bash
+# Connect ke PostgreSQL
+docker compose exec db psql -U postgres -d barangdb
+
+# List tables
+\dt
+
+# Show schema barang table
+\d barang
+
+# Query data
+SELECT * FROM barang;
+
+# Exit psql
+\q
+```
+
+---
+
+## Struktur Project
+
+### Directory Layout
+
+```
+uts-komputasi-awan-docker/
+│
+├── 📄 README.md                          # Dokumentasi ini
+├── 📄 docker-compose.yml                 # Default setup (tanpa nginx)
+├── 📄 docker-compose-with-nginx.yml      # Setup dengan load balancer
+├── 📄 nginx.conf                         # Konfigurasi Nginx
+├── 📄 QUICK_SUMMARY.txt                  # Ringkasan hasil testing
+├── 📄 LOAD_BALANCER_IMPLEMENTATION.md    # Penjelasan load balancer
+├── 📄 TESTING_RESULTS.md                 # Hasil testing lengkap
+├── 📄 LAPORAN_LENGKAP_SEMUA_TUGAS.md    # Laporan komprehensif
+│
+├── 📁 api/                               # Backend API Service
+│   ├── 📄 app.py                         # Flask API application
+│   ├── 📄 Dockerfile                     # Docker image untuk API
+│   └── 📄 requirements.txt                # Python dependencies
+│
+└── 📁 web/                               # Frontend Web Service
+    ├── 📄 app.py                         # Flask web application
+    ├── 📄 Dockerfile                     # Docker image untuk web
+    ├── 📄 requirements.txt                # Python dependencies
+    └── 📁 templates/
+        └── 📄 index.html                 # HTML template
+```
+
+### File Descriptions
+
+| File | Deskripsi |
+|------|-----------|
+| **docker-compose.yml** | Definisi services: web, api, db |
+| **docker-compose-with-nginx.yml** | Menambah Nginx sebagai load balancer |
+| **nginx.conf** | Konfigurasi Nginx (upstream, round-robin) |
+| **api/app.py** | REST API endpoints (CRUD operations) |
+| **api/Dockerfile** | Build image untuk API container |
+| **web/app.py** | Web application dengan form interaktif |
+| **web/Dockerfile** | Build image untuk web container |
+| **web/templates/index.html** | Frontend HTML interface |
+
+---
+
+## Load Balancer
+
+### Konsep
+
+**Load Balancer** adalah komponen yang mendistribusikan traffic secara merata ke multiple backend instances.
+
+**Masalah tanpa Load Balancer:**
+```
+Web → API-1 (80% traffic) ⚠️ OVERLOADED
+Web → API-2 (20% traffic) ⚪ UNDERUSED
+```
+
+**Solusi dengan Load Balancer (Nginx):**
+```
+Web → Nginx (Round-Robin)
+      ├→ API-1 (50% traffic) ✅
+      └→ API-2 (50% traffic) ✅
+```
+
+### Implementasi Nginx
+
+File `nginx.conf` mengkonfigurasi:
+
+```nginx
+upstream api_backend {
+    server api:8080;  # Auto-resolve ke semua API instances
+}
+
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://api_backend;
+    }
+}
+```
+
+### Menggunakan Load Balancer
+
+```bash
+# Start dengan Nginx
+docker compose -f docker-compose-with-nginx.yml up -d --scale api=2
+
+# Nginx akan otomatis:
+# ✅ Detect API-1 dan API-2
+# ✅ Distribute traffic 50-50 (round-robin)
+# ✅ Handle failover (jika 1 instance down)
+```
+
+---
+
+## Scaling
+
+### Horizontal Scaling (Add More Instances)
+
+```bash
+# Scale API menjadi 3 instances
+docker compose up -d --scale api=3
+
+# Scale menjadi 5 instances
+docker compose up -d --scale api=5
+
+# Kembali ke 1 instance
+docker compose up -d --scale api=1
+```
+
+### Monitoring Scaled Instances
+
+```bash
+# Lihat semua instances
+docker compose ps
+
+# Lihat logs semua API instances
+docker compose logs api
+
+# Lihat logs specific instance
+docker compose logs api-1
+docker compose logs api-2
+
+# Monitor real-time
+docker stats
+```
+
+### Best Practices
+
+1. **Mulai dengan 1 instance** untuk testing
+2. **Gunakan load balancer** sebelum scale > 1
+3. **Monitor resource usage** (CPU, Memory)
+4. **Set resource limits** di docker-compose.yml jika perlu
+5. **Test failover** dengan stop satu instance:
+   ```bash
+   docker compose stop api-1
+   # Verifikasi traffic masih lancar via API-2
+   ```
+
+---
+
+## Troubleshooting
+
+### Error: "Cannot connect to database"
+
+```bash
+# 1. Check database status
+docker compose ps db
+
+# 2. Lihat logs database
+docker compose logs db
+
+# 3. Tunggu database siap (ada delay pada startup)
+docker compose logs web
+# Jika ada "retrying..." berarti masih waiting
+
+# 4. Restart services
+docker compose restart
+```
+
+### Error: "Address already in use"
+
+```bash
+# Cek port yang sudah terpakai
+netstat -ano | findstr :<PORT>    # Windows
+lsof -i :<PORT>                   # Mac/Linux
+
+# Opsi 1: Gunakan port berbeda di docker-compose.yml
+# Ubah ports: "8000:8000" → "8001:8000"
+
+# Opsi 2: Stop service yang menggunakan port
+docker ps
+docker stop <CONTAINER_ID>
+```
+
+### Error: "Web tidak bisa koneksi ke API"
+
+```bash
+# 1. Pastikan both services running
+docker compose ps
+
+# 2. Check network
+docker compose exec web curl http://api:8080/barang
+
+# 3. Check Docker network
+docker network ls
+docker network inspect <network_name>
+
+# 4. Restart services
+docker compose restart
+```
+
+### Container Stuck/Slow
+
+```bash
+# 1. Check resource usage
+docker stats
+
+# 2. Lihat logs error
+docker compose logs
+
+# 3. Restart problematic container
+docker compose restart <service_name>
+
+# 4. Nuclear option: clean restart
+docker compose down -v
+docker compose up -d
+```
+
+### Data Loss
+
+```bash
+# Docker Compose menggunakan named volumes
+# Data akan persistent selama volume tidak dihapus
+
+# Untuk backup database:
+docker compose exec db pg_dump -U postgres barangdb > backup.sql
+
+# Untuk restore:
+docker compose exec db psql -U postgres barangdb < backup.sql
+```
+
+---
+
+## Dokumentasi Lengkap
+
+Project ini menyediakan dokumentasi detail dalam file-file berikut:
+
+1. **README.md** (file ini)
+   - Overview dan quick start
+
+2. **QUICK_SUMMARY.txt**
+   - Ringkasan hasil testing dan findings
+
+3. **LOAD_BALANCER_IMPLEMENTATION.md**
+   - Penjelasan detail tentang load balancer
+   - Perbandingan architecture dengan/tanpa Nginx
+   - Implementasi step-by-step
+
+4. **TESTING_RESULTS.md**
+   - Hasil test lengkap semua scenarios
+   - Metrics dan performance data
+   - Test cases dan expected results
+
+5. **LAPORAN_LENGKAP_SEMUA_TUGAS.md**
+   - Laporan komprehensif untuk submission
+   - Analisis mendalam setiap requirement
+   - Screenshots dan detailed findings
+
+---
+
+## Quick Command Reference
+
+```bash
+# BUILD & START
+docker compose up -d                    # Start all services
+docker compose up -d --scale api=3      # Start dengan 3 API instances
+docker compose -f docker-compose-with-nginx.yml up -d  # Dengan Nginx
+
+# MONITORING
+docker compose ps                       # List all containers
+docker compose logs -f                  # Follow logs
+docker stats                            # Monitor resources
+docker compose exec db psql -U postgres -d barangdb  # Database CLI
+
+# TESTING
+curl http://localhost:8080/barang       # Test API
+curl http://localhost:8000              # Test Web
+docker compose exec api curl http://api:8080/barang  # Internal test
+
+# MAINTENANCE
+docker compose restart                  # Restart all services
+docker compose restart api-1            # Restart specific service
+docker compose down                     # Stop all (keep data)
+docker compose down -v                  # Stop all (remove data)
+docker compose logs --tail=50 api       # Last 50 lines of logs
+
+# SCALING
+docker compose up -d --scale api=5      # Scale to 5 instances
+docker compose up -d --scale api=1      # Scale down to 1
+```
+
+---
+
+## Author & License
+
+**Project**: UTS Komputasi Awan (Cloud Computing)  
+**Course**: Cloud Computing Assignment  
+**Technology Stack**: Docker, Docker Compose, Flask, PostgreSQL, Nginx  
+
+---
+
+## Summary
+
+Aplikasi ini mengdemonstrasikan core concepts dari Cloud Computing:
+
+✅ **Containerization** - Encapsulation aplikasi dalam container  
+✅ **Microservices** - Separation of concerns (Web ≠ API)  
+✅ **Orchestration** - Automated container management  
+✅ **Scalability** - Easy horizontal scaling  
+✅ **Load Balancing** - Intelligent traffic distribution  
+✅ **Resilience** - Automatic failover capabilities  
+
+---
+
+## Perlu Bantuan?
+
+1. **Baca dokumentasi lengkap** di folder project
+2. **Check Docker logs** untuk debug informasi
+3. **Lihat curl commands** untuk test API endpoints
+4. **Experiment** dengan scaling dan failover scenarios
+
+Happy learning! 🚀
