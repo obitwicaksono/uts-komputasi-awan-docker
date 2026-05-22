@@ -23,7 +23,7 @@
 
 ## Tentang Project
 
-Aplikasi Manajemen Barang adalah project UTS (Ujian Tengah Semester) untuk mata kuliah **Komputasi Awan (Cloud Computing)** yang mendemonstrasikan:
+Praktikum Docker tugas Mata Kuliah Komputasi Awan yang mendemonstrasikan:
 
 ✅ **Containerization** dengan Docker  
 ✅ **Microservices Architecture** (Web + API separation)  
